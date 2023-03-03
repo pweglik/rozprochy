@@ -1,6 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class JavaUdpServer {
@@ -15,15 +16,15 @@ public class JavaUdpServer {
             socket = new DatagramSocket(portNumber);
             byte[] receiveBuffer = new byte[128];
 
-            byte[] sendBuffer = "Response".getBytes();
-
             while(true) {
                 Arrays.fill(receiveBuffer, (byte)0);
                 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
                 socket.receive(receivePacket);
-                String msg = new String(receivePacket.getData());
+                int number = ByteBuffer.wrap(receiveBuffer).getInt();
+                byte[] sendBuffer = ByteBuffer.allocate(4).putInt(number + 1).array();
+
                 InetAddress sourceAddress = receivePacket.getAddress();
-                System.out.println("received msg: " + msg + " from address: " + sourceAddress.getHostAddress());
+                System.out.println("received msg: " + number + " from address: " + sourceAddress.getHostAddress());
 
                 DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, sourceAddress, receivePacket.getPort());
                 socket.send(sendPacket);
