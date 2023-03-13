@@ -31,7 +31,7 @@ def thread(connection_socket: socket.socket, client_address: Address):
                 del clients[client_address]
             connection_socket.close()
 
-        
+
 def udp_thread(udp_socket: socket.socket):
     while True:
         message, client_address = udp_socket.recvfrom(1024)
@@ -40,23 +40,25 @@ def udp_thread(udp_socket: socket.socket):
             if address != client_address:
                 udp_socket.sendto(message, address)
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_socket:
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
-        udp_socket.bind((HOST, PORT))
 
-        new_udp_thread = threading.Thread(target=udp_thread, args=(udp_socket,))
-        threads.append(new_udp_thread)
-        new_udp_thread.start()
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_socket, socket.socket(
+    socket.AF_INET, socket.SOCK_DGRAM
+) as udp_socket:
+    udp_socket.bind((HOST, PORT))
 
-        tcp_socket.bind((HOST, PORT))
-        tcp_socket.listen()
-        while True:
-            connection_socket, client_address = tcp_socket.accept()
+    new_udp_thread = threading.Thread(target=udp_thread, args=(udp_socket,))
+    threads.append(new_udp_thread)
+    new_udp_thread.start()
 
-            clients[client_address] = connection_socket
+    tcp_socket.bind((HOST, PORT))
+    tcp_socket.listen()
+    while True:
+        connection_socket, client_address = tcp_socket.accept()
 
-            new_thread = threading.Thread(
-                target=thread, args=(connection_socket, client_address)
-            )
-            threads.append(new_thread)
-            new_thread.start()
+        clients[client_address] = connection_socket
+
+        new_thread = threading.Thread(
+            target=thread, args=(connection_socket, client_address)
+        )
+        threads.append(new_thread)
+        new_thread.start()
