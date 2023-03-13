@@ -35,7 +35,7 @@ def thread(connection_socket: socket.socket, client_address: Address):
 def udp_thread(udp_socket: socket.socket):
     while True:
         message, client_address = udp_socket.recvfrom(1024)
-        print("received udp")
+        print(f"received udp from {client_address}")
         for address in clients:
             if address != client_address:
                 udp_socket.sendto(message, address)
@@ -45,6 +45,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_socket:
         udp_socket.bind((HOST, PORT))
 
         new_udp_thread = threading.Thread(target=udp_thread, args=(udp_socket,))
+        threads.append(new_udp_thread)
+        new_udp_thread.start()
 
         tcp_socket.bind((HOST, PORT))
         tcp_socket.listen()

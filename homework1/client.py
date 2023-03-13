@@ -14,7 +14,7 @@ else:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_socket:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
             tcp_socket.connect((HOST, PORT))
-            udp_socket.connect((HOST, PORT))
+            udp_socket.bind(tcp_socket.getsockname())
 
             while not quit:
                 read, write, error = select.select(
@@ -45,7 +45,7 @@ else:
                             break  
                         if message[:3] == "<U>":
                             data = f"{nickname};{message[3:]}"
-                            udp_socket.sendall(bytearray(data.encode("utf-8")))
+                            udp_socket.sendto(bytearray(data.encode("utf-8")), (HOST, PORT))
                         else:
                             data = f"{nickname};{message}"
                             tcp_socket.sendall(bytearray(data.encode("utf-8")))
