@@ -4,42 +4,51 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from fastapi import Body, FastAPI, status
 
-app=FastAPI( )
+app = FastAPI()
 
 # sample requests and queries
 @app.get("/")
-async def root() :
-    return {"message" : "Hello World"}
+async def root():
+    return {"message": "Hello World"}
+
 
 class PollRequest(BaseModel):
     question: str
     possible_answers: List[str]
 
+
 class VoteRequest(BaseModel):
     answer_id: int
+
 
 class PollResponse(BaseModel):
     question: str
     possible_answers: List[str]
 
+
 class VoteReponse(BaseModel):
     answer_id: int
 
-class Poll():
+
+class Poll:
     def __init__(self, question: str, possible_answers: List[str]) -> None:
         self.question = question
         self.possible_answers = possible_answers
         self.votes = {}
 
-class Vote():
+
+class Vote:
     def __init__(self, answer_id: int) -> None:
         self.answer_id = answer_id
 
+
 polls: Dict[int, Poll] = {}
+
 
 @app.get("/poll")
 async def get_polls():
     return polls
+
 
 @app.post("/poll")
 async def create_poll(new_poll: PollRequest):
@@ -48,12 +57,14 @@ async def create_poll(new_poll: PollRequest):
     print(polls)
     return JSONResponse(status_code=status.HTTP_200_OK)
 
+
 @app.get("/poll/{id}")
 async def get_poll(id: int):
     if id in polls:
         return polls[id]
     else:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
+
 
 @app.put("/poll/{id}")
 async def put_poll(id: int, updated_poll: PollRequest):
@@ -63,6 +74,7 @@ async def put_poll(id: int, updated_poll: PollRequest):
     else:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
 
+
 @app.delete("/poll/{id}")
 async def delete_poll(id: int):
     if id in polls:
@@ -71,12 +83,14 @@ async def delete_poll(id: int):
     else:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
 
+
 @app.get("/poll/{id}/vote")
 async def get_votes(id: int):
     if id in polls:
         return polls[id].votes
     else:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
+
 
 @app.post("/poll/{id}/vote")
 async def post_vote(id: int, new_vote: VoteRequest):
@@ -87,12 +101,14 @@ async def post_vote(id: int, new_vote: VoteRequest):
     else:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
 
+
 @app.get("/poll/{id}/vote/{vote_id}")
 async def get_vote(id: int, vote_id):
     if id in polls and vote_id in polls[id].votes:
         return polls[id].votes[vote_id]
     else:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
+
 
 @app.post("/poll/{id}/vote/{vote_id}")
 async def put_vote(id: int, vote_id: int, updated_vote: VoteRequest):

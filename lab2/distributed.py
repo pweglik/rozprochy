@@ -1,23 +1,26 @@
 from fastapi import FastAPI
 from enum import Enum
 
-app=FastAPI( )
+app = FastAPI()
 
 # sample requests and queries
 @app.get("/")
-async def root() :
-    return {"message" : "Hello World"}
+async def root():
+    return {"message": "Hello World"}
+
 
 # sample path paramters => entries in URL
 @app.get("/hello/{name}")
-async def say_hello(name: str) :
-    return {"message" : f"Hello {name}"}
+async def say_hello(name: str):
+    return {"message": f"Hello {name}"}
+
 
 # Path parameters predefined values
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+
 
 @app.get("/v1/models/{model_name}")
 async def get_model(model_name: ModelName):
@@ -29,20 +32,24 @@ async def get_model(model_name: ModelName):
 
     return {"model_name": model_name, "message": "Have some residuals"}
 
+
 # query parametres are added as elements to the url e.g. items?skip=10&limit=3
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
 
 @app.get("/v2/items")
 async def read_item(skip: int = 0, limit: int = 10):
     return fake_items_db[skip : skip + limit]
 
+
 # Optional parameters added to query, one of the element in Union
 from typing import Union
 
-#In this case, there are 3 query parameters:
+# In this case, there are 3 query parameters:
 # needy, a required str.
 # skip, an int with a default value of 0.
 # limit, an optional int.
+
 
 @app.get("/v3/items/{item_id}")
 async def read_user_item(
@@ -51,20 +58,27 @@ async def read_user_item(
     item = {"item_id": item_id, "needy": needy, "skip": skip, "limit": limit}
     return item
 
+
 # if you want to send it as a request body you have to define the class inheritet from pydantic base model
 # Request Body
 from pydantic import BaseModel
+
 
 class Item(BaseModel):
     name: str
     description: Union[str, None] = None
     price: float
     tax: Union[float, None] = None
+
+
 # create model
 @app.post("/v4/items/")
 async def create_item(item: Item):
     return item
+
+
 # using model
+
 
 @app.post("/v5/items/")
 async def create_item(item: Item):
@@ -74,7 +88,9 @@ async def create_item(item: Item):
         item_dict.update({"price_with_tax": price_with_tax})
     return item_dict
 
+
 # all together
+
 
 @app.put("/v6/items/{item_id}")
 async def create_item(item_id: int, item: Item, q: Union[str, None] = None):
@@ -82,6 +98,7 @@ async def create_item(item_id: int, item: Item, q: Union[str, None] = None):
     if q:
         result.update({"q": q})
     return result
+
 
 # If the parameter is also declared in the path, it will be used as a path parameter.
 # If the parameter is of a singular type (like int, float, str, bool, etc) it will be interpreted as a query parameter.
@@ -94,6 +111,7 @@ from fastapi import Body, FastAPI, status
 from fastapi.responses import JSONResponse
 
 items = {"foo": {"name": "Fighters", "size": 6}, "bar": {"name": "Tenders", "size": 3}}
+
 
 @app.put("/v7/items/{item_id}")
 async def upsert_item(
