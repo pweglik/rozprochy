@@ -28,7 +28,7 @@ def display(img, size=2):
 class MnistDataset(Dataset):
     def __init__(self, train: bool):
         self.train = train
-        mndata = MNIST("/home/przemek/studia/sem6/rozprochy/lab3/data")
+        mndata = MNIST("/home/przemek/studia/sem6/rozprochy/homework3/data")
 
         self.images, self.labels = None, None
 
