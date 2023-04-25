@@ -1,5 +1,21 @@
 import matplotlib.pyplot as plt
+
+from torch.utils.data import DataLoader
+from ray.air.config import ScalingConfig
+
+from ray.train.torch import TorchTrainer
+
+from ray import train
+from ray.air import session, Checkpoint
+from ray.train.torch import TorchCheckpoint
+import numpy as np
+from torch import nn
+import torch.optim as optim
 import ray
+
+import torch
+from torch.utils.data import Dataset, random_split
+from mnist import MNIST
 
 
 def display(img, size=2):
@@ -9,15 +25,10 @@ def display(img, size=2):
     plt.show()
 
 
-import torch
-from torch.utils.data import Dataset, random_split
-from mnist import MNIST
-
-
 class MnistDataset(Dataset):
     def __init__(self, train: bool):
         self.train = train
-        mndata = MNIST("./data")
+        mndata = MNIST("/home/przemek/studia/sem6/rozprochy/lab3/data")
 
         self.images, self.labels = None, None
 
@@ -40,36 +51,12 @@ class MnistDataset(Dataset):
         return self.images[idx], self.labels[idx]
 
 
-dataset_train_val = MnistDataset(train=True)
-dataset_test = MnistDataset(train=False)
+def load_data():
+    dataset_train_val = MnistDataset(train=True)
+    dataset_test = MnistDataset(train=False)
+    dataset_train, dataset_val = random_split(dataset_train_val, [54000, 6000])
 
-dataset_train, dataset_val = random_split(dataset_train_val, [54000, 6000])
-
-
-display(dataset_train[0][0][0])
-
-
-display(dataset_train[42][0][0])
-
-
-from torch.utils.data import DataLoader
-
-train_dataloader = DataLoader(dataset_train, batch_size=60, shuffle=True)
-test_dataloader = DataLoader(dataset_test, batch_size=10, shuffle=True)
-val_dataloader = DataLoader(dataset_val, batch_size=100, shuffle=True)
-
-
-device = (
-    "cuda"
-    if torch.cuda.is_available()
-    else "mps"
-    if torch.backends.mps.is_available()
-    else "cpu"
-)
-print(f"Using {device} device")
-
-from torch import nn
-import torch.optim as optim
+    return dataset_train, dataset_test, dataset_val
 
 
 class MnistClassifier(nn.Module):
@@ -107,91 +94,110 @@ class MnistClassifier(nn.Module):
         return loss
 
 
-import time
+def train_function(config: dict):
+    batch_size = config["batch_size"]
+
+    dataset_train, dataset_test, dataset_val = load_data()
+
+    train_dataloader = DataLoader(dataset_train, batch_size=60, shuffle=True)
+    test_dataloader = DataLoader(dataset_test, batch_size=10, shuffle=True)
+    val_dataloader = DataLoader(dataset_val, batch_size=100, shuffle=True)
+
+    train_dataloader = train.torch.prepare_data_loader(train_dataloader)
+    test_dataloader = train.torch.prepare_data_loader(test_dataloader)
+    val_dataloader = train.torch.prepare_data_loader(val_dataloader)
+
+    batch_size_per_worker = batch_size // session.get_world_size()
+
+    net = train.torch.prepare_model(MnistClassifier())
+
+    # training loop
+    for epoch in range(3):  # loop over the dataset multiple times
+        print(f"Epoch: {epoch}")
+        running_loss = 0.0
+
+        # train epoch
+        for i, batch in enumerate(train_dataloader):
+            inputs, labels = batch
+
+            loss = net.optimize_paramters(inputs, labels)
+
+        # validate epoch
+        with torch.no_grad():
+            val_loss = 0
+            for i, batch in enumerate(val_dataloader):
+                inputs, labels = batch
+                outputs = net(inputs)
+                loss = net.loss(outputs, labels)
+
+                val_loss += loss.item()
+
+            val_loss = val_loss / (len(val_dataloader) * batch_size_per_worker)
+
+            print(f"[{epoch + 1}] validation loss: {val_loss:.5f}")
+
+        metrics = dict(running_loss=running_loss)
+        checkpoint = TorchCheckpoint.from_state_dict(net.state_dict())
+        session.report(metrics, checkpoint=checkpoint)
 
 
-net = MnistClassifier()
+if __name__ == "__main__":
+    ray.init()
+    use_gpu = ray.available_resources().get("GPU", 0) >= 1
 
-start_time = time.time()
-
-for epoch in range(30):  # loop over the dataset multiple times
-    print(f"Epoch: {epoch}")
-    running_loss = 0.0
-    for i, data in enumerate(train_dataloader, 0):
-        # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
-
-        loss = net.optimize_paramters(inputs, labels)
-
-        # Gather data and report
-        running_loss += loss.item()
-
-    print(
-        f"[{epoch + 1}] training loss: {running_loss / (len(train_dataloader) * train_dataloader.batch_size):.5f}"
+    trainer = TorchTrainer(
+        train_loop_per_worker=train_function,
+        train_loop_config={"batch_size": 10},
+        scaling_config=ScalingConfig(num_workers=1, use_gpu=True),
     )
-    running_loss = 0.0
+    result = trainer.fit()
+    latest_checkpoint = result.checkpoint
+
+    net = TorchCheckpoint.from_checkpoint(latest_checkpoint).get_model(
+        MnistClassifier()
+    )
+
+    dataset_train, dataset_test, dataset_val = load_data()
+
+    test_dataloader = DataLoader(dataset_test, batch_size=10, shuffle=True)
+
+    correct_pred = {classname: 0 for classname in map(str, range(10))}
+    total_pred = {classname: 0 for classname in map(str, range(10))}
 
     with torch.no_grad():
-        val_loss = 0
-        for i, data in enumerate(val_dataloader, 0):
-            inputs, labels = data
-            outputs = net(inputs)
-            loss = net.loss(outputs, labels)
+        for data in test_dataloader:
+            images, labels = data
+            outputs = net(images)
+            predictions = torch.argmax(outputs, dim=1)
+            # collect the correct predictions for each class
+            for label, prediction in zip(labels, predictions):
+                if label == prediction:
+                    correct_pred[str(label.item())] += 1
+                total_pred[str(label.item())] += 1
 
-            val_loss += loss.item()
+    for classname, correct_count in correct_pred.items():
+        accuracy = 100 * float(correct_count) / total_pred[classname]
+        print(f"Accuracy for class: {classname:5s} is {accuracy:.1f} %")
 
-        print(
-            f"[{epoch + 1}] validation loss: {val_loss / (len(val_dataloader) * val_dataloader.batch_size):.5f}"
-        )
-        val_loss = 0.0
+    def result():
+        dataiter = iter(test_dataloader)
 
-end_time = time.time()
+        image_to_display = None
 
-print(f"Finished Training in {end_time - start_time:.1f}s")
+        for _ in range(8):
+            images, labels = next(dataiter)
+            output = net(images)
+            print(f"ground truth:\n{torch.argmax(output, dim=1)}")
+            print(f"preditions:\n{labels}")
 
+            images = torch.squeeze(images, dim=1).numpy()
 
-correct_pred = {classname: 0 for classname in map(str, range(10))}
-total_pred = {classname: 0 for classname in map(str, range(10))}
+            image_to_display = images[0]
 
-with torch.no_grad():
-    for data in test_dataloader:
-        images, labels = data
-        outputs = net(images)
-        predictions = torch.argmax(outputs, dim=1)
-        # collect the correct predictions for each class
-        for label, prediction in zip(labels, predictions):
-            if label == prediction:
-                correct_pred[str(label.item())] += 1
-            total_pred[str(label.item())] += 1
+            for i in range(1, len(images)):
+                image_to_display = np.hstack((image_to_display, images[i]))
 
-for classname, correct_count in correct_pred.items():
-    accuracy = 100 * float(correct_count) / total_pred[classname]
-    print(f"Accuracy for class: {classname:5s} is {accuracy:.1f} %")
+            display(image_to_display, size=10)
 
-
-import numpy as np
-
-
-def result():
-    dataiter = iter(test_dataloader)
-
-    image_to_display = None
-
-    for _ in range(8):
-        images, labels = next(dataiter)
-        output = net(images)
-        print(torch.argmax(output, dim=1))
-        print(labels)
-
-        images = torch.squeeze(images, dim=1).numpy()
-
-        image_to_display = images[0]
-
-        for i in range(1, len(images)):
-            image_to_display = np.hstack((image_to_display, images[i]))
-
-        display(image_to_display, size=10)
-
-
-with torch.no_grad():
-    result()
+    with torch.no_grad():
+        result()

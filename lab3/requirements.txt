@@ -1,0 +1,7 @@
+ray
+ray[air]
+matplotlib
+torch
+torchvision
+torchaudio
+python-mnist
