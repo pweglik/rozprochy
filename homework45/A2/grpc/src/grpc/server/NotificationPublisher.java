@@ -3,23 +3,51 @@ package grpc.server;
 import java.util.concurrent.SubmissionPublisher;
 
 public class NotificationPublisher implements Runnable {
-    SubmissionPublisher<TickReply> notificationPublisher;
+    SubmissionPublisher<NotificationReply> notificationPublisher;
 
-    public NotificationPublisher(SubmissionPublisher<TickReply> notificationPublisher) {
+
+    public NotificationPublisher(SubmissionPublisher<NotificationReply> notificationPublisher) {
         this.notificationPublisher = notificationPublisher;
     }
 
     @Override
     public void run() {
-        int i = 0;
         while (!Thread.currentThread().isInterrupted()) {
-            i++;
-            TickReply reply = TickReply.newBuilder().setTick("Blarz " + i).build();
+            float randomTemp = (float)(5 + Math.random() * (25));
+            String city = "Cracow";
+            NotificationReply reply = NotificationReply.newBuilder().setCity(city).setTemperature(randomTemp).build();
+
             Integer n = notificationPublisher.getNumberOfSubscribers();
-            System.out.println("Publishing new tick " + i + " to " + n + " subscribers.");
+            System.out.println("Publishing city " + city + " temperature " + randomTemp + "C to " + n + " subscribers.");
             notificationPublisher.submit(reply);
             try {
                 Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                return;
+            }
+
+            randomTemp = (float)(5 + Math.random() * (25));
+            city = "Warsaw";
+            reply = NotificationReply.newBuilder().setCity(city).setTemperature(randomTemp).build();
+
+            n = notificationPublisher.getNumberOfSubscribers();
+            System.out.println("Publishing city " + city + " temperature " + randomTemp + "C to " + n + " subscribers.");
+            notificationPublisher.submit(reply);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                return;
+            }
+
+            randomTemp = (float)(5 + Math.random() * (25));
+            city = "Berlin";
+            reply = NotificationReply.newBuilder().setCity(city).setTemperature(randomTemp).build();
+
+            n = notificationPublisher.getNumberOfSubscribers();
+            System.out.println("Publishing city " + city + " temperature " + randomTemp + "C to " + n + " subscribers.");
+            notificationPublisher.submit(reply);
+            try {
+                Thread.sleep(3000);
             } catch (InterruptedException ex) {
                 return;
             }

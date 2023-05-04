@@ -4,19 +4,20 @@
 package grpc.server;
 
 /**
- * Protobuf type {@code ticker.TickReply}
+ * Protobuf type {@code ticker.NotificationReply}
  */
-public  final class TickReply extends
+public  final class NotificationReply extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ticker.TickReply)
-    TickReplyOrBuilder {
+    // @@protoc_insertion_point(message_implements:ticker.NotificationReply)
+    NotificationReplyOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use TickReply.newBuilder() to construct.
-  private TickReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use NotificationReply.newBuilder() to construct.
+  private NotificationReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private TickReply() {
-    tick_ = "";
+  private NotificationReply() {
+    city_ = "";
+    temperature_ = 0F;
   }
 
   @java.lang.Override
@@ -24,7 +25,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private TickReply(
+  private NotificationReply(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -46,7 +47,12 @@ private static final long serialVersionUID = 0L;
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            tick_ = s;
+            city_ = s;
+            break;
+          }
+          case 21: {
+
+            temperature_ = input.readFloat();
             break;
           }
           default: {
@@ -70,49 +76,58 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return grpc.server.TickerProto.internal_static_ticker_TickReply_descriptor;
+    return grpc.server.eventProto.internal_static_ticker_NotificationReply_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return grpc.server.TickerProto.internal_static_ticker_TickReply_fieldAccessorTable
+    return grpc.server.eventProto.internal_static_ticker_NotificationReply_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            grpc.server.TickReply.class, grpc.server.TickReply.Builder.class);
+            grpc.server.NotificationReply.class, grpc.server.NotificationReply.Builder.class);
   }
 
-  public static final int TICK_FIELD_NUMBER = 1;
-  private volatile java.lang.Object tick_;
+  public static final int CITY_FIELD_NUMBER = 1;
+  private volatile java.lang.Object city_;
   /**
-   * <code>string tick = 1;</code>
+   * <code>string city = 1;</code>
    */
-  public java.lang.String getTick() {
-    java.lang.Object ref = tick_;
+  public java.lang.String getCity() {
+    java.lang.Object ref = city_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      tick_ = s;
+      city_ = s;
       return s;
     }
   }
   /**
-   * <code>string tick = 1;</code>
+   * <code>string city = 1;</code>
    */
   public com.google.protobuf.ByteString
-      getTickBytes() {
-    java.lang.Object ref = tick_;
+      getCityBytes() {
+    java.lang.Object ref = city_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      tick_ = b;
+      city_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
+  }
+
+  public static final int TEMPERATURE_FIELD_NUMBER = 2;
+  private float temperature_;
+  /**
+   * <code>float temperature = 2;</code>
+   */
+  public float getTemperature() {
+    return temperature_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -129,8 +144,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getTickBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, tick_);
+    if (!getCityBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, city_);
+    }
+    if (temperature_ != 0F) {
+      output.writeFloat(2, temperature_);
     }
     unknownFields.writeTo(output);
   }
@@ -141,8 +159,12 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getTickBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, tick_);
+    if (!getCityBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, city_);
+    }
+    if (temperature_ != 0F) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeFloatSize(2, temperature_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -154,14 +176,18 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof grpc.server.TickReply)) {
+    if (!(obj instanceof grpc.server.NotificationReply)) {
       return super.equals(obj);
     }
-    grpc.server.TickReply other = (grpc.server.TickReply) obj;
+    grpc.server.NotificationReply other = (grpc.server.NotificationReply) obj;
 
     boolean result = true;
-    result = result && getTick()
-        .equals(other.getTick());
+    result = result && getCity()
+        .equals(other.getCity());
+    result = result && (
+        java.lang.Float.floatToIntBits(getTemperature())
+        == java.lang.Float.floatToIntBits(
+            other.getTemperature()));
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -173,76 +199,79 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + TICK_FIELD_NUMBER;
-    hash = (53 * hash) + getTick().hashCode();
+    hash = (37 * hash) + CITY_FIELD_NUMBER;
+    hash = (53 * hash) + getCity().hashCode();
+    hash = (37 * hash) + TEMPERATURE_FIELD_NUMBER;
+    hash = (53 * hash) + java.lang.Float.floatToIntBits(
+        getTemperature());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickReply parseFrom(byte[] data)
+  public static grpc.server.NotificationReply parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickReply parseFrom(java.io.InputStream input)
+  public static grpc.server.NotificationReply parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.server.TickReply parseDelimitedFrom(java.io.InputStream input)
+  public static grpc.server.NotificationReply parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static grpc.server.TickReply parseDelimitedFrom(
+  public static grpc.server.NotificationReply parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.server.TickReply parseFrom(
+  public static grpc.server.NotificationReply parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -255,7 +284,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(grpc.server.TickReply prototype) {
+  public static Builder newBuilder(grpc.server.NotificationReply prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -271,26 +300,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code ticker.TickReply}
+   * Protobuf type {@code ticker.NotificationReply}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ticker.TickReply)
-      grpc.server.TickReplyOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ticker.NotificationReply)
+      grpc.server.NotificationReplyOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return grpc.server.TickerProto.internal_static_ticker_TickReply_descriptor;
+      return grpc.server.eventProto.internal_static_ticker_NotificationReply_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return grpc.server.TickerProto.internal_static_ticker_TickReply_fieldAccessorTable
+      return grpc.server.eventProto.internal_static_ticker_NotificationReply_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              grpc.server.TickReply.class, grpc.server.TickReply.Builder.class);
+              grpc.server.NotificationReply.class, grpc.server.NotificationReply.Builder.class);
     }
 
-    // Construct using grpc.server.TickReply.newBuilder()
+    // Construct using grpc.server.NotificationReply.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -308,7 +337,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      tick_ = "";
+      city_ = "";
+
+      temperature_ = 0F;
 
       return this;
     }
@@ -316,17 +347,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return grpc.server.TickerProto.internal_static_ticker_TickReply_descriptor;
+      return grpc.server.eventProto.internal_static_ticker_NotificationReply_descriptor;
     }
 
     @java.lang.Override
-    public grpc.server.TickReply getDefaultInstanceForType() {
-      return grpc.server.TickReply.getDefaultInstance();
+    public grpc.server.NotificationReply getDefaultInstanceForType() {
+      return grpc.server.NotificationReply.getDefaultInstance();
     }
 
     @java.lang.Override
-    public grpc.server.TickReply build() {
-      grpc.server.TickReply result = buildPartial();
+    public grpc.server.NotificationReply build() {
+      grpc.server.NotificationReply result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -334,9 +365,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public grpc.server.TickReply buildPartial() {
-      grpc.server.TickReply result = new grpc.server.TickReply(this);
-      result.tick_ = tick_;
+    public grpc.server.NotificationReply buildPartial() {
+      grpc.server.NotificationReply result = new grpc.server.NotificationReply(this);
+      result.city_ = city_;
+      result.temperature_ = temperature_;
       onBuilt();
       return result;
     }
@@ -375,19 +407,22 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof grpc.server.TickReply) {
-        return mergeFrom((grpc.server.TickReply)other);
+      if (other instanceof grpc.server.NotificationReply) {
+        return mergeFrom((grpc.server.NotificationReply)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(grpc.server.TickReply other) {
-      if (other == grpc.server.TickReply.getDefaultInstance()) return this;
-      if (!other.getTick().isEmpty()) {
-        tick_ = other.tick_;
+    public Builder mergeFrom(grpc.server.NotificationReply other) {
+      if (other == grpc.server.NotificationReply.getDefaultInstance()) return this;
+      if (!other.getCity().isEmpty()) {
+        city_ = other.city_;
         onChanged();
+      }
+      if (other.getTemperature() != 0F) {
+        setTemperature(other.getTemperature());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -404,11 +439,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      grpc.server.TickReply parsedMessage = null;
+      grpc.server.NotificationReply parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (grpc.server.TickReply) e.getUnfinishedMessage();
+        parsedMessage = (grpc.server.NotificationReply) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -418,71 +453,97 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object tick_ = "";
+    private java.lang.Object city_ = "";
     /**
-     * <code>string tick = 1;</code>
+     * <code>string city = 1;</code>
      */
-    public java.lang.String getTick() {
-      java.lang.Object ref = tick_;
+    public java.lang.String getCity() {
+      java.lang.Object ref = city_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        tick_ = s;
+        city_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string tick = 1;</code>
+     * <code>string city = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getTickBytes() {
-      java.lang.Object ref = tick_;
+        getCityBytes() {
+      java.lang.Object ref = city_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        tick_ = b;
+        city_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string tick = 1;</code>
+     * <code>string city = 1;</code>
      */
-    public Builder setTick(
+    public Builder setCity(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      tick_ = value;
+      city_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string tick = 1;</code>
+     * <code>string city = 1;</code>
      */
-    public Builder clearTick() {
+    public Builder clearCity() {
       
-      tick_ = getDefaultInstance().getTick();
+      city_ = getDefaultInstance().getCity();
       onChanged();
       return this;
     }
     /**
-     * <code>string tick = 1;</code>
+     * <code>string city = 1;</code>
      */
-    public Builder setTickBytes(
+    public Builder setCityBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      tick_ = value;
+      city_ = value;
+      onChanged();
+      return this;
+    }
+
+    private float temperature_ ;
+    /**
+     * <code>float temperature = 2;</code>
+     */
+    public float getTemperature() {
+      return temperature_;
+    }
+    /**
+     * <code>float temperature = 2;</code>
+     */
+    public Builder setTemperature(float value) {
+      
+      temperature_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>float temperature = 2;</code>
+     */
+    public Builder clearTemperature() {
+      
+      temperature_ = 0F;
       onChanged();
       return this;
     }
@@ -499,41 +560,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ticker.TickReply)
+    // @@protoc_insertion_point(builder_scope:ticker.NotificationReply)
   }
 
-  // @@protoc_insertion_point(class_scope:ticker.TickReply)
-  private static final grpc.server.TickReply DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ticker.NotificationReply)
+  private static final grpc.server.NotificationReply DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new grpc.server.TickReply();
+    DEFAULT_INSTANCE = new grpc.server.NotificationReply();
   }
 
-  public static grpc.server.TickReply getDefaultInstance() {
+  public static grpc.server.NotificationReply getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<TickReply>
-      PARSER = new com.google.protobuf.AbstractParser<TickReply>() {
+  private static final com.google.protobuf.Parser<NotificationReply>
+      PARSER = new com.google.protobuf.AbstractParser<NotificationReply>() {
     @java.lang.Override
-    public TickReply parsePartialFrom(
+    public NotificationReply parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new TickReply(input, extensionRegistry);
+      return new NotificationReply(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<TickReply> parser() {
+  public static com.google.protobuf.Parser<NotificationReply> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<TickReply> getParserForType() {
+  public com.google.protobuf.Parser<NotificationReply> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public grpc.server.TickReply getDefaultInstanceForType() {
+  public grpc.server.NotificationReply getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

@@ -2,17 +2,19 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "grpc.server";
-option java_outer_classname = "TickerProto";
+option java_outer_classname = "eventProto";
 
 package ticker;
 
-service StreamingTicker {
-  rpc subscribeTicker (TickRequest) returns (stream TickReply) {}
+service StreamingEvents {
+  rpc subscribe (NotificationRequest) returns (stream NotificationReply) {}
 }
 
-message TickRequest {
+message NotificationRequest {
+  string city = 1;
 }
 
-message TickReply {
-  string tick = 1;
+message NotificationReply {
+  string city = 1;
+  float temperature = 2;
 }

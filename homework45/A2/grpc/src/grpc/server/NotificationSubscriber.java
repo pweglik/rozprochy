@@ -6,13 +6,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import io.grpc.stub.StreamObserver;
 
-public class NotificationSubscriber implements Subscriber<TickReply> {
+public class NotificationSubscriber implements Subscriber<NotificationReply> {
     private AtomicInteger count = new AtomicInteger(0);
     private Subscription subscription;
 
-    private StreamObserver<TickReply> observer;
+    private StreamObserver<NotificationReply> observer;
 
-    public NotificationSubscriber(StreamObserver<TickReply> observer) {
+    public NotificationSubscriber(StreamObserver<NotificationReply> observer) {
         this.count = new AtomicInteger(0);
         this.observer = observer;
     }
@@ -28,7 +28,7 @@ public class NotificationSubscriber implements Subscriber<TickReply> {
     }
 
     @Override
-    public void onNext(TickReply reply) {
+    public void onNext(NotificationReply reply) {
 //        logger.debug("Subscriber received next tick: " + reply.getTick());
         observer.onNext(reply);
         Integer currentCount = count.incrementAndGet();

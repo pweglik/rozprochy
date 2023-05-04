@@ -4,18 +4,19 @@
 package grpc.server;
 
 /**
- * Protobuf type {@code ticker.TickRequest}
+ * Protobuf type {@code ticker.NotificationRequest}
  */
-public  final class TickRequest extends
+public  final class NotificationRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ticker.TickRequest)
-    TickRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:ticker.NotificationRequest)
+    NotificationRequestOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use TickRequest.newBuilder() to construct.
-  private TickRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use NotificationRequest.newBuilder() to construct.
+  private NotificationRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private TickRequest() {
+  private NotificationRequest() {
+    city_ = "";
   }
 
   @java.lang.Override
@@ -23,7 +24,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private TickRequest(
+  private NotificationRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -31,6 +32,7 @@ private static final long serialVersionUID = 0L;
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
+    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -41,6 +43,12 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
+          case 10: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            city_ = s;
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -62,15 +70,49 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return grpc.server.TickerProto.internal_static_ticker_TickRequest_descriptor;
+    return grpc.server.eventProto.internal_static_ticker_NotificationRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return grpc.server.TickerProto.internal_static_ticker_TickRequest_fieldAccessorTable
+    return grpc.server.eventProto.internal_static_ticker_NotificationRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            grpc.server.TickRequest.class, grpc.server.TickRequest.Builder.class);
+            grpc.server.NotificationRequest.class, grpc.server.NotificationRequest.Builder.class);
+  }
+
+  public static final int CITY_FIELD_NUMBER = 1;
+  private volatile java.lang.Object city_;
+  /**
+   * <code>string city = 1;</code>
+   */
+  public java.lang.String getCity() {
+    java.lang.Object ref = city_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      city_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string city = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getCityBytes() {
+    java.lang.Object ref = city_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      city_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   private byte memoizedIsInitialized = -1;
@@ -87,6 +129,9 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getCityBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, city_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -96,6 +141,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (!getCityBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, city_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -106,12 +154,14 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof grpc.server.TickRequest)) {
+    if (!(obj instanceof grpc.server.NotificationRequest)) {
       return super.equals(obj);
     }
-    grpc.server.TickRequest other = (grpc.server.TickRequest) obj;
+    grpc.server.NotificationRequest other = (grpc.server.NotificationRequest) obj;
 
     boolean result = true;
+    result = result && getCity()
+        .equals(other.getCity());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -123,74 +173,76 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + CITY_FIELD_NUMBER;
+    hash = (53 * hash) + getCity().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickRequest parseFrom(byte[] data)
+  public static grpc.server.NotificationRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.server.TickRequest parseFrom(java.io.InputStream input)
+  public static grpc.server.NotificationRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.server.TickRequest parseDelimitedFrom(java.io.InputStream input)
+  public static grpc.server.NotificationRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static grpc.server.TickRequest parseDelimitedFrom(
+  public static grpc.server.NotificationRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.server.TickRequest parseFrom(
+  public static grpc.server.NotificationRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -203,7 +255,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(grpc.server.TickRequest prototype) {
+  public static Builder newBuilder(grpc.server.NotificationRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -219,26 +271,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code ticker.TickRequest}
+   * Protobuf type {@code ticker.NotificationRequest}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ticker.TickRequest)
-      grpc.server.TickRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ticker.NotificationRequest)
+      grpc.server.NotificationRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return grpc.server.TickerProto.internal_static_ticker_TickRequest_descriptor;
+      return grpc.server.eventProto.internal_static_ticker_NotificationRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return grpc.server.TickerProto.internal_static_ticker_TickRequest_fieldAccessorTable
+      return grpc.server.eventProto.internal_static_ticker_NotificationRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              grpc.server.TickRequest.class, grpc.server.TickRequest.Builder.class);
+              grpc.server.NotificationRequest.class, grpc.server.NotificationRequest.Builder.class);
     }
 
-    // Construct using grpc.server.TickRequest.newBuilder()
+    // Construct using grpc.server.NotificationRequest.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -256,23 +308,25 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      city_ = "";
+
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return grpc.server.TickerProto.internal_static_ticker_TickRequest_descriptor;
+      return grpc.server.eventProto.internal_static_ticker_NotificationRequest_descriptor;
     }
 
     @java.lang.Override
-    public grpc.server.TickRequest getDefaultInstanceForType() {
-      return grpc.server.TickRequest.getDefaultInstance();
+    public grpc.server.NotificationRequest getDefaultInstanceForType() {
+      return grpc.server.NotificationRequest.getDefaultInstance();
     }
 
     @java.lang.Override
-    public grpc.server.TickRequest build() {
-      grpc.server.TickRequest result = buildPartial();
+    public grpc.server.NotificationRequest build() {
+      grpc.server.NotificationRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -280,8 +334,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public grpc.server.TickRequest buildPartial() {
-      grpc.server.TickRequest result = new grpc.server.TickRequest(this);
+    public grpc.server.NotificationRequest buildPartial() {
+      grpc.server.NotificationRequest result = new grpc.server.NotificationRequest(this);
+      result.city_ = city_;
       onBuilt();
       return result;
     }
@@ -320,16 +375,20 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof grpc.server.TickRequest) {
-        return mergeFrom((grpc.server.TickRequest)other);
+      if (other instanceof grpc.server.NotificationRequest) {
+        return mergeFrom((grpc.server.NotificationRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(grpc.server.TickRequest other) {
-      if (other == grpc.server.TickRequest.getDefaultInstance()) return this;
+    public Builder mergeFrom(grpc.server.NotificationRequest other) {
+      if (other == grpc.server.NotificationRequest.getDefaultInstance()) return this;
+      if (!other.getCity().isEmpty()) {
+        city_ = other.city_;
+        onChanged();
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -345,17 +404,86 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      grpc.server.TickRequest parsedMessage = null;
+      grpc.server.NotificationRequest parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (grpc.server.TickRequest) e.getUnfinishedMessage();
+        parsedMessage = (grpc.server.NotificationRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
           mergeFrom(parsedMessage);
         }
       }
+      return this;
+    }
+
+    private java.lang.Object city_ = "";
+    /**
+     * <code>string city = 1;</code>
+     */
+    public java.lang.String getCity() {
+      java.lang.Object ref = city_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        city_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string city = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCityBytes() {
+      java.lang.Object ref = city_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        city_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string city = 1;</code>
+     */
+    public Builder setCity(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      city_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string city = 1;</code>
+     */
+    public Builder clearCity() {
+      
+      city_ = getDefaultInstance().getCity();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string city = 1;</code>
+     */
+    public Builder setCityBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      city_ = value;
+      onChanged();
       return this;
     }
     @java.lang.Override
@@ -371,41 +499,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ticker.TickRequest)
+    // @@protoc_insertion_point(builder_scope:ticker.NotificationRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:ticker.TickRequest)
-  private static final grpc.server.TickRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ticker.NotificationRequest)
+  private static final grpc.server.NotificationRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new grpc.server.TickRequest();
+    DEFAULT_INSTANCE = new grpc.server.NotificationRequest();
   }
 
-  public static grpc.server.TickRequest getDefaultInstance() {
+  public static grpc.server.NotificationRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<TickRequest>
-      PARSER = new com.google.protobuf.AbstractParser<TickRequest>() {
+  private static final com.google.protobuf.Parser<NotificationRequest>
+      PARSER = new com.google.protobuf.AbstractParser<NotificationRequest>() {
     @java.lang.Override
-    public TickRequest parsePartialFrom(
+    public NotificationRequest parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new TickRequest(input, extensionRegistry);
+      return new NotificationRequest(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<TickRequest> parser() {
+  public static com.google.protobuf.Parser<NotificationRequest> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<TickRequest> getParserForType() {
+  public com.google.protobuf.Parser<NotificationRequest> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public grpc.server.TickRequest getDefaultInstanceForType() {
+  public grpc.server.NotificationRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
