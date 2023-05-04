@@ -5,22 +5,21 @@
 module Demo
 {
   enum operation { MIN, MAX, AVG };
-  
+
   exception NoInput {};
 
-  struct A
-  {
-    short a;
-    long b;
-    float c;
-    string d;
-  }
+  sequence<float> Numbers;
+
+  class Result {
+    float result;
+    optional(3) float precision;
+  };
 
   interface Calc
   {
-    long add(int a, int b);
-    long subtract(int a, int b);
-    void op(A a1, short b1); //załóżmy, że to też jest operacja arytmetyczna ;)
+    Result add(float a, float b);
+    void setPrecision(int precision);
+    float avg(Numbers numbers, optional(1) bool geometric);
   };
 
 };

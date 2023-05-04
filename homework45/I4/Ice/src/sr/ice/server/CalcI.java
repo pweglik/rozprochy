@@ -1,45 +1,60 @@
 package sr.ice.server;
 
-import Demo.A;
 import Demo.Calc;
 import com.zeroc.Ice.Current;
+import java.lang.Math;
+
+import java.util.List;
 
 public class CalcI implements Calc {
 	private static final long serialVersionUID = -2448962912780867770L;
-	long counter = 0;
+	int precision = 8;
 
 	@Override
-	public long add(int a, int b, Current __current) {
-		System.out.println("ADD: a = " + a + ", b = " + b + ", result = " + (a + b));
+	public float add(float a, float b, Current __current) {
+		System.out.println("ADD");
 
-		if (a > 1000 || b > 1000) {
-			try {
-				Thread.sleep(6000);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
+		float result = a + b;
+
+		double factor = Math.pow(10, this.precision);
+		int temp = (int)(result * factor);
+		result = (float)((float)(temp) / factor);
+
+		return result;
+	}
+
+	@Override
+	public float avg(float[] numbers, java.util.Optional<java.lang.Boolean> geometric, Current __current) {
+		System.out.println("AVG");
+
+		float avg;
+
+		if (geometric.isPresent() && geometric.get() == true) {
+			float sum = 1;
+			for (float value : numbers) {
+				sum *= value;
 			}
+			avg = (float)Math.sqrt((double)sum);
+		}
+		else {
+			float sum = 0;
+			for (float value : numbers) {
+				sum += value;
+			}
+			avg = sum / numbers.length;
 		}
 
-		if (__current.ctx.values().size() > 0) {
-			System.out.println("There are some properties in the context");
-		}
+		double factor = Math.pow(10, this.precision);
+		int temp = (int)(avg * factor);
+		avg = (float)((float)(temp) / factor);
 
-		return a + b;
+		return avg;
 	}
 
 	@Override
-	public long subtract(int a, int b, Current __current) {
-		return 0;
-	}
+	public void setPrecision(int precision, Current __current) {
+		System.out.println("SET PRECISION");
 
-
-	@Override
-	public /*synchronized*/ void op(A a1, short b1, Current current) {
-		System.out.println("OP" + (++counter));
-		try {
-			Thread.sleep(500);
-		} catch (java.lang.InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
+		this.precision = precision;
 	}
 }

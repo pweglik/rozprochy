@@ -1,6 +1,5 @@
 package sr.ice.client;
 
-import Demo.A;
 import Demo.CalcPrx;
 import com.zeroc.Ice.*;
 
@@ -9,6 +8,7 @@ import java.lang.Exception;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class IceClient {
@@ -33,8 +33,8 @@ public class IceClient {
 			CompletableFuture<Long> cfl = null;
 			String line = null;
 			java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
-			long r;
-			A a;
+			float r;
+			float[] array = {4f, 6f, 7f};
 
 			// 4. Wywołanie zdalnych operacji i zmiana trybu proxy dla obiektu obj1
 			do {
@@ -43,76 +43,28 @@ public class IceClient {
 					line = in.readLine();
 					switch (line) {
 						case "add":
-							r = obj1.add(7, 8);
+							r = obj1.add(7.1234321f, 8.235313245f);
 							System.out.println("RESULT = " + r);
 							break;
-						case "add2":
-							r = obj1.add(7000, 8000);
+						case "avg":
+							Optional<Boolean> empty = Optional.empty();
+
+							r = obj1.avg(array, empty);
 							System.out.println("RESULT = " + r);
 							break;
-						case "subtract":
-							r = obj1.subtract(7, 8);
+						case "avg-geo":
+							Optional<Boolean> geometric = Optional.of(true);
+
+							r = obj1.avg(array, geometric);
 							System.out.println("RESULT = " + r);
 							break;
-						case "op":
-							a = new A((short) 11, 22, 33.0f, "ala ma kota");
-							obj1.op(a, (short) 44);
-							System.out.println("DONE");
+						case "setprec2":
+							obj1.setPrecision(2);
 							break;
-						case "op2":
-							a = new A((short) 11, 22, 33.0f, "ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ala ma kota ");
-							obj1.op(a, (short) 44);
-							System.out.println("DONE");
-							break;
-						case "op 10":
-							a = new A((short) 11, 22, 33.0f, "ala ma kota");
-							for (int i = 0; i < 10; i++) obj1.op(a, (short) 44);
-							System.out.println("DONE");
-							break;
-						case "add-with-ctx": //wysłanie dodatkowych danych stanowiących kontekst wywołania
-							Map<String, String> map = new HashMap<>();
-							map.put("key1", "val1");
-							map.put("key2", "val2");
-							r = obj1.add(7, 8, map);
-							System.out.println("RESULT = " + r);
-							break;
-						case "compress on":
-							obj1.ice_compress(true);
-							System.out.println("Compression enabled");
-							break;
-						case "compress off":
-							obj1.ice_compress(false);
-							System.out.println("Compression disabled");
+						case "setprec4":
+							obj1.setPrecision(4);
 							break;
 
-						/* PONIŻEJ WYWOŁANIA REALIZOWANE W TRYBIE ASYNCHRONICZNYM */
-
-						case "add-asyn1": //future-based
-							obj1.addAsync(7000, 8000).whenComplete((result, ex) -> System.out.println("RESULT (asyn) = " + result));
-							break;
-						case "add-asyn2-req": //future-based  1. zlecenie wyłania
-							cfl = obj1.addAsync(7000, 8000);
-							break;
-						case "add-asyn2-res": //future-based  2. odebranie wyniku
-							r = cfl.join();
-							System.out.println("RESULT = " + r);
-							break;
-						case "op-asyn1a 100": //co się dzieje "w sieci"?
-							a = new A((short) 11, 22, 33.0f, "ala ma kota");
-							for (int i = 0; i < 100; i++) {
-								obj1.opAsync(a, (short) 99);
-							}
-							System.out.println("DONE");
-							break;
-						case "op-asyn1b 100":
-							a = new A((short) 11, 22, 33.0f, "ala ma kota");
-							for (int i = 0; i < 100; i++) {
-								obj1.opAsync(a, (short) 99).whenComplete((result, ex) ->
-										System.out.println("CALL (asyn) finished")
-								);
-							}
-							System.out.println("DONE");
-							break;
 
 						/* PONIŻEJ USTAWIANIE TRYBU PRACY PROXY */
 

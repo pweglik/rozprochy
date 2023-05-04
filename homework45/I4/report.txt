@@ -4,3 +4,4 @@ w s1 i s2 możemy zaobserwować serializację wartości opcjonalnych. Te pola s�
 
 ICE:
 
+Po inspekcji w wiresharku zaobserwowałem, że opcjonalny argument również nie jest wysyłany.
