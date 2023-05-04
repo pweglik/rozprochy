@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6a62f469-ea05-4f90-aa29-2455842e9321" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../server/.idea/libraries/lib.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/error_prone_annotations-2.10.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/failureaccess-1.0.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-api-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-context-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-core-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-netty-shaded-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-protobuf-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-protobuf-lite-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/grpc-stub-1.54.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/guava-31.1-jre.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/javax.annotation-api-1.3.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/jsr305-3.0.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/netty-common-4.1.75.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/perfmark-api-0.25.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/lib/protobuf-java-3.22.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/person.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/protoc-gen-grpc-java" afterDir="false" />
-    </list>
+    <list default="true" id="6a62f469-ea05-4f90-aa29-2455842e9321" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,7 +27,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.26525423" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -125,6 +106,7 @@
       <workItem from="1683132382216" duration="738000" />
       <workItem from="1683133220973" duration="192000" />
       <workItem from="1683133427564" duration="7000" />
+      <workItem from="1683189835191" duration="56000" />
     </task>
     <servers />
   </component>
