@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package tutorial;
+
+option java_multiple_files = true;
+option java_package = "sr.proto";
+option java_outer_classname = "StudentProto";
+
+enum ScholarshipType {
+  SCIENCE = 0;
+  SOCIAL = 1;
+  SPORT = 2;
+  ART = 3;
+}
+
+message Student {
+  string name = 1;
+  int32 id = 2;
+  string email = 3;
+
+  message Class {
+    string name = 1;
+    int32 ects = 2;
+    float grade = 3;
+  }
+
+  ScholarshipType scholarshipType = 4;
+  int32 scholarshipValue = 5;
+  repeated Class classes = 6;
+}
+
+message AwardScholarshipArguments {
+  int32 studentId = 1;
+  ScholarshipType type = 2;
+  int32 value = 3;
+}
+
+message AwardScholarshipResult {
+  bool isScholarshipAwarded = 1;
+}
+
+service ScholarshipManager {
+  rpc AwardScholarship (AwardScholarshipArguments) returns (AwardScholarshipResult) {}
+}
+
+

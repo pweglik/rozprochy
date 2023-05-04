@@ -1,0 +1,6 @@
+GRPC:
+
+w s1 i s2 możemy zaobserwować serializację wartości opcjonalnych. Te pola są omijane w pliki s1. Plik s1. jest krótszy
+
+ICE:
+
