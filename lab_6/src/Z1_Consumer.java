@@ -21,6 +21,7 @@ public class Z1_Consumer {
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
+        channel.basicQos(1);
 
         // queue
         String QUEUE_NAME = "queue1";

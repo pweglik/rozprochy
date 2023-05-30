@@ -24,12 +24,19 @@ public class Z1_Producer {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);        
 
         // producer (publish msg)
+        while(true){
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String message = br.readLine();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String message = br.readLine();
+            if(message == "x"){
+                break;
+            }
 
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
-        System.out.println("Sent: " + message);
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+            System.out.println("Sent: " + message);
+
+        }
+
 
         // close
         channel.close();
